@@ -6,7 +6,7 @@
 
 </div>
 
-@viteReactRefresh
+    @viteReactRefresh
     @vite('resources/js/app.jsx')
 
 @endsection

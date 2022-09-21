@@ -95,8 +95,20 @@ class PostController extends Controller
 
     public function listagemPosts(Request $request)
     {
-        sleep(2);
+
         //return [];
         return Post::all();
+    }
+
+    public function storePost(Request $request)
+    {
+
+        $request->validate([
+            'title' => 'required',
+            'body' => 'required'
+        ]);
+
+        return Post::create([ "title"=> $request->title, "body" => $request->body ]);
+
     }
 }

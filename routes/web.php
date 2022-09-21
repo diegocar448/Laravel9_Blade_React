@@ -34,3 +34,4 @@ Route::get('/posts', [App\Http\Controllers\PostController::class, 'index'])->nam
 //Route::resource('posts', "PostController")->middleware('auth');
 
 Route::get('/postslistagem', [App\Http\Controllers\PostController::class, 'listagemPosts'])->name('posts.list');
+Route::post('/storepost', [App\Http\Controllers\PostController::class, 'storePost'])->name('posts.store');
