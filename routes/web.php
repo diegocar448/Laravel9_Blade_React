@@ -35,3 +35,7 @@ Route::get('/posts', [App\Http\Controllers\PostController::class, 'index'])->nam
 
 Route::get('/postslistagem', [App\Http\Controllers\PostController::class, 'listagemPosts'])->name('posts.list');
 Route::post('/storepost', [App\Http\Controllers\PostController::class, 'storePost'])->name('posts.store');
+Route::post('/updatepost/{id?}', [App\Http\Controllers\PostController::class, 'updatePost'])->name('posts.update');
+Route::post('/editpost/{id?}', [App\Http\Controllers\PostController::class, 'editPost'])->name('posts.edit');
+Route::post('/deletepost/{id?}', [App\Http\Controllers\PostController::class, 'destroy'])->name('posts.destroy');
+

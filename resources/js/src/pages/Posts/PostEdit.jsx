@@ -4,18 +4,42 @@ import { Link } from "react-router-dom";
 //components
 import Loading from "../../components/Loading";
 
-//hooks
-import {storePost} from '../../hooks/storePost';
-import { useNavigate } from "react-router-dom"; //parar redirecionar o usar depois que criar o post
+//axios
+import url from '../../services/url';
 
-const PostCreate = () => {
+//hooks
+import {updateSendPost} from '../../hooks/updatePost';
+import { useNavigate } from "react-router-dom"; //parar redirecionar o usar depois que criar o post
+import { useParams } from "react-router-dom";
+
+const PostEdit = () => {
+
+    const {id} = useParams();
+
 
     let [title, setTitle] = useState("");
     let [body, setBody] = useState("");
     let [loading, setLoading] = useState(false);
     let [errors, setErrors] = useState(undefined);
+    let post;
 
-    let teste = 'border-color: red';
+    useEffect(() => {
+
+
+        post = url.post(`/editpost/${id}`)
+            .then((response) => {
+
+                console.log(response.data.title)
+
+                setTitle(response.data.title);
+                setBody(response.data.body);
+
+                return response
+            })
+
+    }, []);
+
+
 
     //usar o navigate para redirecionar para outra pagina
     const navigate = useNavigate();
@@ -24,12 +48,12 @@ const PostCreate = () => {
         e.preventDefault();
         setLoading(true)
 
-        let resultado = await storePost({ title, body });
+        let resultado = await updateSendPost({id, title, body });
 
-        if (resultado.status === 201) {
+        console.log(resultado)
+
+        if (resultado.status === 200) {
             setLoading(false);
-            setTitle("");
-            setBody("");
 
             navigate("/posts");
         }else{
@@ -51,12 +75,19 @@ const PostCreate = () => {
 
 
 
-    if (loading === false) {
+
+
+
+
+
+
+
+    if (loading === false && title !== "" && body !== "") {
         return (
             <>
                 <div className="card card-primary">
                     <div className="card-header">
-                        <h3 className="card-title">Adicionar Postagem</h3>
+                        <h3 className="card-title">Atualizar Postagem</h3>
                     </div>
                     <form onSubmit={handleSubmit}>
                         <div className="card-body">
@@ -67,8 +98,9 @@ const PostCreate = () => {
                                     name="title"
                                     className="form-control"
                                     placeholder="Titulo"
-                                    onChange={ (e) => setTitle(e.target.value) }
+                                    onChange={ (e) => e.target.value !== "" ? setTitle(e.target.value) : '' }
                                     style={ errors?.title ? { borderColor:'red'} : {}}
+                                    value={ title }
 
                                 />
                             </div>
@@ -79,14 +111,15 @@ const PostCreate = () => {
                                     name="texto"
                                     className="form-control"
                                     placeholder="Texto"
-                                    onChange={ (e) => setBody(e.target.value) }
+                                    onChange={ (e) => e.target.value !== "" ? setBody(e.target.value) : '' }
                                     style={ errors?.body ? { borderColor:'red'} : {}}
+                                    value={ body }
                                 />
                             </div>
                         </div>
 
                         <div className="card-footer">
-                            <button type='submit' className="btn btn-block bg-gradient-success btn-lg">Enviar </button>
+                            <button type='submit' className="btn btn-block bg-gradient-success btn-lg">Atualizar </button>
                             <Link to="/posts" className='btn btn-block bg-gradient-danger btn-lg'>Voltar</Link>
                         </div>
                     </form>
@@ -123,7 +156,6 @@ const PostCreate = () => {
             <Loading />
         )
     }
-
 }
 
-export default PostCreate
+export default PostEdit

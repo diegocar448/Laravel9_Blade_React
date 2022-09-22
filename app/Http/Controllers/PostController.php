@@ -78,7 +78,7 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
     }
 
     /**
@@ -87,9 +87,11 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+
+        $post = Post::find($id);
+        return $post->delete();
     }
 
 
@@ -110,5 +112,26 @@ class PostController extends Controller
 
         return Post::create([ "title"=> $request->title, "body" => $request->body ]);
 
+    }
+
+    public function editPost(Request $request, $id)
+    {
+        return Post::find($id);
+    }
+
+    public function updatePost(Request $request, $id)
+    {
+
+        $request->validate([
+            'title' => 'required',
+            'body' => 'required'
+        ]);
+
+        $post = Post::find($id);
+        $post->title = $request->title;
+        $post->body = $request->body;
+        $post->save();
+
+        return $post;
     }
 }

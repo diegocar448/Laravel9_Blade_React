@@ -17,18 +17,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from './src/pages/Home';
 import Post from './src/pages/Post';
 import PostCreate from './src/pages/Posts/PostCreate';
+import PostEdit from './src/pages/Posts/PostEdit';
 
 
-// if (document.getElementById('app')) {
-//     console.log("app")
-//     ReactDOM.createRoot(document.getElementById('app')).render(
-//         <BrowserRouter>
-//             <Home key="home"></Home>
-//         </BrowserRouter>
-
-//     );
-// }else if(document.getElementById('posts')){
-//     console.log("posts")
     ReactDOM.createRoot(
             document.getElementById('posts') ||
             document.getElementById('app')
@@ -38,6 +29,7 @@ import PostCreate from './src/pages/Posts/PostCreate';
                 <Route path="/home" element={<Home key="home" />} />
                 <Route path="/posts" element={<Post key="posts"/>} />
                 <Route path="/posts/create/" element={<PostCreate />} />
+                <Route path="/posts/edit/:id" element={<PostEdit />} />
             </Routes>
         </BrowserRouter>
     );

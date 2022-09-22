@@ -2,18 +2,22 @@ import React, {useState, useEffect} from 'react'
 import { Link } from "react-router-dom";
 
 //components
-import Button from '../components/Button';
 import Loading from '../components/Loading';
-
+import Button from '../components/Button';
+import { deletePost } from '../hooks/deletePost';
 
 //axios
 import url from '../services/url';
+
+//hooks
+import { useNavigate } from "react-router-dom"; //parar redirecionar o usar depois que criar o post
 
 
 const Post = () => {
     //states
     let [loading, setLoading] = useState(true);
     let [lista, setLista] = useState([]);
+    let [errors, setErrors] = useState(undefined);
 
     useEffect(() => {
         url.get("/postslistagem")
@@ -22,6 +26,36 @@ const Post = () => {
                 setLoading(false);
             })
     }, []);
+
+
+    //usar o navigate para redirecionar para outra pagina
+    const navigate = useNavigate();
+
+
+    const handleExcluir = async (e, id) => {
+        e.preventDefault();
+        setLoading(true);
+
+        let remover = await deletePost(id);
+
+        if(remover.data === 1){
+            console.log("A")
+            setLoading(false);
+
+            navigate("/posts");
+        }else{
+            console.log("B")
+            setLoading(false);
+            setErrors(remover);
+
+        }
+
+
+    }
+
+    function handleAlert(e){
+        e.target.parentNode.parentNode.parentNode.parentNode.setAttribute("style", "display:none");
+    }
 
 
     if(loading === false){
@@ -51,6 +85,13 @@ const Post = () => {
                                             <td>{tag.title}</td>
                                             <td>{tag.body}</td>
                                             <td>
+                                                <Link to={`/posts/edit/${tag.id}`} className="btn btn-block btn-primary" >Editar</Link>
+                                                <hr />
+
+                                                <form onSubmit={(e) => handleExcluir(e, tag.id)}>
+
+                                                    <Button classe="btn btn-block btn-danger" title="Excluir"/>
+                                                </form>
 
                                             </td>
                                         </tr>
@@ -65,7 +106,45 @@ const Post = () => {
                         </table>
                     </div>
                 </div>
+
+
+                {
+                    errors ?
+
+                    <div id="toastsContainerTopRight" className="toasts-top-right fixed" style={{ display:'' }}>
+                        <div className="toast bg-danger fade show" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div className="toast-header">
+                                <strong className="mr-auto">Error ao validar os campos</strong>
+                                <small></small>
+                                <button data-dismiss="toast" type="button" className="ml-2 mb-1 close" aria-label="Close">
+                                    <span onClick={(e) => handleAlert(e)} aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div className="toast-body">
+                                Favor verificar os campos
+                            </div>
+                        </div>
+                    </div>
+                    :""
+
+
+                }
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         )
 
     }else{
