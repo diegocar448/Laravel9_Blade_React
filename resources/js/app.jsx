@@ -28,7 +28,7 @@ import PostEdit from './src/pages/Posts/PostEdit';
             <Routes>
                 <Route path="/home" element={<Home key="home" />} />
                 <Route path="/posts" element={<Post key="posts"/>} />
-                <Route path="/posts/create/" element={<PostCreate />} />
+                <Route path="/posts/create" element={<PostCreate />} />
                 <Route path="/posts/edit/:id" element={<PostEdit />} />
             </Routes>
         </BrowserRouter>

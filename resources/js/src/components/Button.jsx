@@ -1,4 +1,6 @@
 const Button = ({title, classe}) => {
+
+
   return (
     <>
         <button className={classe}>{ title }</button>

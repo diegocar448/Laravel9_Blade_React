@@ -134,4 +134,11 @@ class PostController extends Controller
 
         return $post;
     }
+
+    public function buscar(Request $request){
+
+        $post = Post::where("title", 'like', "%".$request->title."%")->get();
+
+        return $post;
+    }
 }

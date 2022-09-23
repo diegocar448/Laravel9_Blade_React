@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Loading from '../components/Loading';
 import Button from '../components/Button';
 import { deletePost } from '../hooks/deletePost';
+import { buscarPost, storePost, loadPost } from '../hooks/storePost';
 
 //axios
 import url from '../services/url';
@@ -18,6 +19,10 @@ const Post = () => {
     let [loading, setLoading] = useState(true);
     let [lista, setLista] = useState([]);
     let [errors, setErrors] = useState(undefined);
+    let [buscarTitulo, setBuscarTitulo] = useState("");
+
+
+
 
     useEffect(() => {
         url.get("/postslistagem")
@@ -39,18 +44,33 @@ const Post = () => {
         let remover = await deletePost(id);
 
         if(remover.data === 1){
-            console.log("A")
-            setLoading(false);
 
-            navigate("/posts");
+            let loadDaLista = await loadPost();
+            setLista(loadDaLista.data)
+            setLoading(false);
         }else{
-            console.log("B")
             setLoading(false);
             setErrors(remover);
-
         }
 
 
+    }
+
+    const handleBuscar = async (e) => {
+        e.preventDefault();
+
+        setLoading(true);
+
+        let buscar = await buscarPost(buscarTitulo);
+
+        if (buscar.status === 200) {
+            setLista(buscar.data)
+
+        }else{
+
+        }
+        setBuscarTitulo("");
+        setLoading(false);
     }
 
     function handleAlert(e){
@@ -70,6 +90,18 @@ const Post = () => {
                         </h3>
                     </div>
                     <div className="card-body pad table-responsive">
+                        <div className="row">
+                            <div className="col-9">
+                                <input type="text" className="form-control" placeholder="Digite um Titulo" onChange={ (e) => setBuscarTitulo(e.target.value) } />
+                            </div>
+                            <div className="col-3">
+                                <button className="btn btn-block btn-primary" onClick={(e) => handleBuscar(e)}>
+                                    Buscar
+                                </button>
+
+                            </div>
+                        </div>
+                        <br />
                         <table className="table table-bordered text-center">
                             <tbody>
                                 <tr>

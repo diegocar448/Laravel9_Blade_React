@@ -38,4 +38,5 @@ Route::post('/storepost', [App\Http\Controllers\PostController::class, 'storePos
 Route::post('/updatepost/{id?}', [App\Http\Controllers\PostController::class, 'updatePost'])->name('posts.update');
 Route::post('/editpost/{id?}', [App\Http\Controllers\PostController::class, 'editPost'])->name('posts.edit');
 Route::post('/deletepost/{id?}', [App\Http\Controllers\PostController::class, 'destroy'])->name('posts.destroy');
+Route::post('/buscarpost', [App\Http\Controllers\PostController::class, 'buscar'])->name('posts.buscar');
 
